@@ -2,26 +2,36 @@
 <head> 
   <title>PyRo Command Center</title> 
 
-  <script>
-    console.log("update");
-
-    function updateSpeed(){
-      val = document.getElementById('dimSlider').value;
-      document.getElementById('dimVal').value = val;
-      var xhttp = new XMLHttpRequest();
-      xhttp.open("GET","Val=" + val,true)
-      xhttp.send();
-
-    }
-
-    var intervalId = setInterval(function(){updateSpeed();},200);
-  </script>
+ 
 
 </head> 
 <body> 
     <h1>Ajax in Control WebPage</h1>
 
-    <input type="numer" id="dimVal" name="Speed" min="-100" max="100" />
-    <input type="range" id="dimSlider" name="Speed" min="-100" max="100" />
+    <input type="number" id="dimXVal" name="Speed" min="-100" max="100" />
+	<input type="number" id="dimYVal" name="Speed" min="-100" max="100" />
+
 </body>
+<script>
+console.log("update");
+
+var oldX = 0
+
+function updateSpeed(){
+	
+	prefix = "DATA/"
+
+	var valX = document.getElementById('dimXVal').value;
+
+	if (oldX !== valX) {
+		oldX = valX
+		var xhttp = new XMLHttpRequest();
+		payload = prefix + "joystick:xval=" + valX + "&yval="+0 //Temp 0 since only 1 motor is implemented
+		xhttp.open("GET",payload,true)
+		xhttp.send();
+	}
+}
+
+var intervalId = setInterval(function(){updateSpeed();},100);
+</script>
 </html>
