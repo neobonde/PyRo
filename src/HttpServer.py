@@ -24,7 +24,7 @@ def Start():
 			conn.send(Val)
 			
 		else:
-			with open('index.htm', 'r') as html:
+			with open('www/index.htm', 'r') as html:
 				conn.send(html.read())
 		conn.sendall('\n')
 		conn.close()
