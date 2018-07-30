@@ -36,7 +36,9 @@ def Start():
 extension2ContentType = {
 	"htm" : "text/html",
 	"html" : "text/html",
-	"ico" : "image/x-icon"
+	"css" : "text/css",
+	"js" : "text/javascript",
+	"ico" : "image/x-icon",
 }
 
 def handleRequest(conn):
@@ -106,7 +108,7 @@ def handleRequest(conn):
 				conn.sendall("HTTP/1.1 404 Not Found")
 				return
 				
-			conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nServer: Pyro\r\nContent-Type: %s\r\n\r\n"%contentType)
+			conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nCache-Control: no-cache, no-store, must-revalidate\nServer: Pyro\r\nContent-Type: %s\r\n\r\n"%contentType)
 			conn.sendall(file.read())
 			return 
 	elif method == "POST":
