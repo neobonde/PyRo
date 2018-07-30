@@ -1,0 +1,49 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: rgba(54, 106, 150,1);
+    background: linear-gradient(to top,rgba(54, 106, 150,1), rgba(54, 121, 176));
+}
+
+.box {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.box .row {
+    border: 1px dotted grey;
+}
+
+.box .row.header {
+    flex: 0 1 auto;
+
+}
+
+.box .row.content {
+    flex: 1 1 auto;
+    text-align: center;
+
+}
+
+.box .row.footer {
+    flex: 0 1 40px;
+}
+
+
+h1 {
+    text-align: center;
+}
+
+
+ h1{
+     font-family: Arial, Helvetica, sans-serif   
+ }
+
+ #container h1{
+
+     color: rgba(0, 0, 0, 0.333);
+     vertical-align: middle
+ }*/

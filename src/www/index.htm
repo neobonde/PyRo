@@ -1,45 +1,73 @@
-<html> 
-<head> 
-  <title>PyRo Command Center</title> 
+<html>
 
- 
+<head>
+    <title>PyRo Command Center</title>
+    <script src="virtualjoystick.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 
-</head> 
-<body> 
-    <h1>PyRo Command Center</h1>
+<body scroll="no">
+    <div class="box">
+        <div class="row header">
+            <h1>PyRo Command Center</h1>
+        </div>
+        <div class="row content" id="container">
+            <input type="number" id="dimXVal" name="Speed" min="-100" max="100" />
+            <input type="number" id="dimYVal" name="Speed" min="-100" max="100" />
+            <H1>Joypad</H1>
+        </div>
+        <div class="row footer">
+                <p style="text-align: center;">Source code available on <a href="https://github.com/neobonde/PyRo">GitHub</a></p>
+        </div>
+    </div>
+    
+    
 
-    <input type="number" id="dimXVal" name="Speed" min="-100" max="100" />
-	<input type="number" id="dimYVal" name="Speed" min="-100" max="100" />
+    <div id="container">
+        
+    </div>
 
 </body>
 <script>
-console.log("Pyro client started!");
-
-document.getElementById('dimXVal').value = (window.Event) ? e.pageX : event.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-document.getElementById('dimYval').value = (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-
-
-document.addEventListener('mouseover', function(event) {
-    console.log("Mouse over")
-});
-
-var oldX = 0
-
-function updateSpeed(){
-	
-	prefix = "DATA/"
-
-	var valX = document.getElementById('dimXVal').value;
-
-	if (oldX !== valX) {
-		oldX = valX
-		var xhttp = new XMLHttpRequest();
-		payload = prefix + "joystick:xval=" + valX + "&yval="+0 //Temp 0 since only 1 motor is implemented
-		xhttp.open("GET",payload,true)
-		xhttp.send();
-	}
+    //Disable scrolling
+    document.ontouchmove = function(event){
+    event.preventDefault();
 }
+    console.log("Pyro client started!");
 
-var intervalId = setInterval(function(){updateSpeed();},100);
+    var joystick = new VirtualJoystick({
+        container: document.getElementById('container'),
+        mouseSupport: true,
+        limitStickTravel: true,
+        stickRadius: 100,
+        strokeStyle: "rgba(255, 200, 54, 0.498)",
+    });
+
+    var oldX = 0
+    var oldY = 0
+
+    function updateSpeed() {
+
+        prefix = "DATA/"
+        var valX = joystick.deltaX()
+        var valY = joystick.deltaY()
+
+        diffX = Math.abs(valX - oldX)
+        diffY = Math.abs(valY - oldY)
+        if (diffX > 5 || diffY > 5) {
+            document.getElementById("dimXVal").value = valX
+            document.getElementById("dimYVal").value = valY
+            oldX = valX
+            var xhttp = new XMLHttpRequest();
+            payload = prefix + "joystick:xval=" + parseInt(valX) + "&yval=" + parseInt(valY) //Temp 0 since only 1 motor is implemented
+            xhttp.open("GET", payload, true)
+            xhttp.send();
+        }
+    }
+
+    var intervalId = setInterval(function () {
+        updateSpeed();
+    }, 200);
 </script>
+
 </html>
