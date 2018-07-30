@@ -46,9 +46,9 @@ def handleRequest(conn):
 
 	method, RequestURI, protocolVersion = request_line.split(' ',2)
 
-	print("Method: %s"%method)
-	print("RequestURI: %s"%RequestURI)
-	print("protocolVer: %s"%protocolVersion)
+	print("Method: '%s'"%method)
+	print("RequestURI: '%s'"%RequestURI)
+	print("protocolVer: '%s'"%protocolVersion)
 
 
 	if method == "GET":
@@ -56,7 +56,8 @@ def handleRequest(conn):
 		if RequestURI == "/":
 			conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nServer: Pyro\r\nContent-Type: text/html\r\n\r\n")
 			with open("www/index.htm","r") as file:
-				conn.send(file.read())
+
+				conn.sendall(file.read())
 				return
 		elif "/DATA/" in RequestURI:
 			try:
@@ -106,7 +107,7 @@ def handleRequest(conn):
 				return
 				
 			conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nServer: Pyro\r\nContent-Type: %s\r\n\r\n"%contentType)
-			conn.send(file.read())
+			conn.sendall(file.read())
 			return 
 	elif method == "POST":
 		pass

@@ -6,14 +6,22 @@
 
 </head> 
 <body> 
-    <h1>Ajax in Control WebPage</h1>
+    <h1>PyRo Command Center</h1>
 
     <input type="number" id="dimXVal" name="Speed" min="-100" max="100" />
 	<input type="number" id="dimYVal" name="Speed" min="-100" max="100" />
 
 </body>
 <script>
-console.log("update");
+console.log("Pyro client started!");
+
+document.getElementById('dimXVal').value = (window.Event) ? e.pageX : event.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+document.getElementById('dimYval').value = (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+
+
+document.addEventListener('mouseover', function(event) {
+    console.log("Mouse over")
+});
 
 var oldX = 0
 
