@@ -8,6 +8,7 @@ extension2ContentType = {
 	"html" : "text/html",
 	"css" : "text/css",
 	"js" : "text/javascript",
+	"min.js" : "text/javascript",
 	"ico" : "image/x-icon",
 }
 
@@ -15,7 +16,7 @@ class HttpServer():
 	def __init__(self, read_timeout):
 		# Create a socket
 		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		# self.s.setblocking(False)
+		self.s.settimeout(0)
 		self.resp = None
 		# Bind socket to all of the hosts network addresses
 		self.s.bind(('0.0.0.0', 80))
@@ -24,27 +25,28 @@ class HttpServer():
 		self.timeout = read_timeout
 
 	def acceptConn(self):
-		gc.collect()
-		try:
-			conn, addr = self.s.accept()
-		except OSError:
-			return
-		dPrint (" -------start------- ")
-		dPrint("Got a connection from %s" % str(addr))
-		resp = self.handleRequest(conn)
-		if resp is not None:
-			self.resp = resp
+		#Make sure to handle all request that are "pending"
+		while (True):
+			try:
+				conn, addr = self.s.accept()
+				dPrint (" -------start------- ")
+				dPrint("Got a connection from %s" % str(addr))
+				resp = self.handleRequest(conn)
+				if resp is not None:
+					self.resp = resp
 
-		conn.sendall('\n')
-		conn.close()
-		dPrint("Connection with %s closed" % str(addr))
-		dPrint("esp free mem: %s"%str(esp.freemem()))
-		dPrint("gc free mem: %s"%str(gc.mem_free()))
-		dPrint (" --------end------- ")
+				# conn.sendall('\n')
+				conn.close()
+				dPrint("Connection with %s closed" % str(addr))
+				dPrint("esp free mem: %s"%str(esp.freemem()))
+				dPrint("gc free mem: %s"%str(gc.mem_free()))
+				dPrint (" --------end------- ")
+			except OSError:
+				return
 
 
 	def handleRequest(self,conn):
-		# conn.settimeout(self.timeout*100)
+		conn.setblocking(True)
 		try:
 			request = (conn.recv(1024)).decode("utf-8")
 			dPrint("full req: '%s'"%str(request))
@@ -82,7 +84,7 @@ class HttpServer():
 				temp = ""
 				extension = ""
 				try:
-					temp, extension = RequestURI.split(".")
+					temp, extension = RequestURI.split(".",1)
 				except ValueError:
 					extension = "html"
 
@@ -102,6 +104,7 @@ class HttpServer():
 				
 				conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nCache-Control: no-cache, no-store, must-revalidate\nServer: Pyro\r\nContent-Type: %s\r\n\r\n"%contentType)
 				with open("www" + RequestURI,"r") as file:
+					# print(file.read())
 					conn.sendall(file.read())
 
 				return None

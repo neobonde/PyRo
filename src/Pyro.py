@@ -10,7 +10,7 @@ y = 0
 def main():
     
     networkSR_ms = 100 
-    controllerSR_us = 500
+    controllerSR_us = 5000
 
     #Setup
     server = HttpServer(networkSR_ms)
@@ -22,13 +22,11 @@ def main():
     #Main loop
     while(True):
         if(time.ticks_diff(time.ticks_ms(), lastNetwork) > networkSR_ms):
-            # print("network")
             lastNetwork = time.ticks_ms()
             handleNetworking(server)
             motorLeft.SetSpeed(x)
         
         if(time.ticks_diff(time.ticks_us(),lastControl) > controllerSR_us):
-            # print("update")
             lastControl = time.ticks_us()
             motorLeft.Update()
             # print(motorLeft.GetActualSpeed())

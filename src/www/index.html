@@ -2,8 +2,29 @@
 
 <head>
     <title>PyRo Command Center</title>
-    <script src="virtualjoystick.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        function loadSync(filePath, fileType) {
+            var req = new XMLHttpRequest();
+            req.open("GET", filePath, false); // 'false': synchronous.
+            req.send(null);
+
+            var headElement = document.getElementsByTagName("head")[0];
+            if (fileType == "css") {
+                var newElement = document.createElement("link");
+                newElement.type = "text/css";
+                newElement.rel = "stylesheet"
+                newElement.href = filePath
+            } else {
+                var newElement = document.createElement("script");
+                newElement.type = "text/javascript";
+                newElement.text = req.responseText;
+            }
+            headElement.appendChild(newElement);
+        }
+
+        loadSync("virtualjoystick.min.js", "js")
+        loadSync("style.css", "css")
+    </script>
 </head>
 
 <body scroll="no">
@@ -17,22 +38,23 @@
             <H1>Joypad</H1>
         </div>
         <div class="row footer">
-                <p style="text-align: center;">Source code available on <a href="https://github.com/neobonde/PyRo">GitHub</a></p>
+            <p style="text-align: center;">Source code available on
+                <a href="https://github.com/neobonde/PyRo">GitHub</a>
+            </p>
         </div>
     </div>
-    
-    
+
+
 
     <div id="container">
-        
-    </div>
 
+    </div>
 </body>
 <script>
     //Disable scrolling
-    document.ontouchmove = function(event){
-    event.preventDefault();
-}
+    document.ontouchmove = function (event) {
+        event.preventDefault();
+    }
     console.log("Pyro client started!");
 
     var joystick = new VirtualJoystick({
