@@ -1,5 +1,6 @@
 import usocket as socket
 import gc, esp, os
+from Util import dPrint
 
 
 extension2ContentType = {
@@ -28,37 +29,40 @@ class HttpServer():
 			conn, addr = self.s.accept()
 		except OSError:
 			return
-		print("Got a connection from %s" % str(addr))
+		dPrint (" -------start------- ")
+		dPrint("Got a connection from %s" % str(addr))
 		resp = self.handleRequest(conn)
 		if resp is not None:
 			self.resp = resp
 
 		conn.sendall('\n')
 		conn.close()
-		print("Connection with %s closed" % str(addr))
-		print("esp free mem: %s"%str(esp.freemem()))
-		print("gc free mem: %s"%str(gc.mem_free()))
+		dPrint("Connection with %s closed" % str(addr))
+		dPrint("esp free mem: %s"%str(esp.freemem()))
+		dPrint("gc free mem: %s"%str(gc.mem_free()))
+		dPrint (" --------end------- ")
 
 
 	def handleRequest(self,conn):
 		# conn.settimeout(self.timeout*100)
 		try:
 			request = (conn.recv(1024)).decode("utf-8")
+			dPrint("full req: '%s'"%str(request))
 		except OSError:
-			print ("Read Timeout")
+			dPrint ("Read Timeout")
 			return None
 
 		if len(request) <= 0:
 			conn.sendall("HTTP/1.1 400 Bad Request")
 			return None
 		request_line, headers_alone = request.split('\r\n', 1)
-		print("Got Request:\n%s"%str(request_line))
+		dPrint("Got Request:\n%s"%str(request_line))
 
 		method, RequestURI, protocolVersion = request_line.split(' ',2)
 
-		print("Method: '%s'"%method)
-		print("RequestURI: '%s'"%RequestURI)
-		print("protocolVer: '%s'"%protocolVersion)
+		dPrint("Method: '%s'"%method)
+		dPrint("RequestURI: '%s'"%RequestURI)
+		dPrint("protocolVer: '%s'"%protocolVersion)
 
 
 		if method == "GET":
