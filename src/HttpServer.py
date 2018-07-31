@@ -1,5 +1,6 @@
 import usocket as socket
 from SpeedMotor import SpeedMotor
+import gc, esp, os
 
 motor1 = SpeedMotor(2,0)
 
@@ -14,23 +15,17 @@ def Start():
 
 	s.listen(1)	# just queue up some requests
 	while True:
+		gc.collect()
 		conn, addr = s.accept()
 		print("Got a connection from %s" % str(addr))
 		handleRequest(conn)
-		# request = str(request)
-		# ib = request.find('Val=')
-		# if ib > 0 :
-		# 	ie = request.find(' ', ib)
-		# 	Val = request[ib+4:ie]
-		# 	print("Val =", Val)
-		# 	conn.send(Val)
-			
-		# else:
-		# 	with open('www/index.htm', 'r') as html:
-		# 		conn.send(html.read())
+
 		conn.sendall('\n')
 		conn.close()
-		print("Connection wth %s closed" % str(addr))
+		print("Connection with %s closed" % str(addr))
+		print("esp free mem: %s"%str(esp.freemem()))
+		print("gc free mem: %s"%str(gc.mem_free()))
+
 
 
 extension2ContentType = {
@@ -57,7 +52,7 @@ def handleRequest(conn):
 		# Special case for root, then we should serve index
 		if RequestURI == "/":
 			conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nServer: Pyro\r\nContent-Type: text/html\r\n\r\n")
-			with open("www/index.htm","r") as file:
+			with open("www/index.html","r") as file:
 
 				conn.sendall(file.read())
 				return
@@ -101,15 +96,18 @@ def handleRequest(conn):
 				conn.sendall("HTTP/1.1 501 Not Implemented")
 				return
 
-			file = None
+			# file = None
 			try:
-				file = open("www" + RequestURI,"r")
+				os.stat("www" + RequestURI)
+				# file = open("www" + RequestURI,"r")
 			except OSError:
 				conn.sendall("HTTP/1.1 404 Not Found")
 				return
-				
+			
 			conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nCache-Control: no-cache, no-store, must-revalidate\nServer: Pyro\r\nContent-Type: %s\r\n\r\n"%contentType)
-			conn.sendall(file.read())
+			with open("www" + RequestURI,"r") as file:
+				conn.sendall(file.read())
+
 			return 
 	elif method == "POST":
 		pass
