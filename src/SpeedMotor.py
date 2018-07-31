@@ -11,7 +11,7 @@ class SpeedMotor:
         self.speed = 0
         self.lerpStep = 0
 
-        self.lerpSpeed = 0.002
+        self.lerpSpeed = 1/50
 
     
     # Pass a speed between -100 and 100
@@ -32,8 +32,7 @@ class SpeedMotor:
         self.lerpStep += self.lerpSpeed
         if self.lerpStep >= 1:
             self.lerpStep == 1
-        self.actSpeed = Lerp(self.lerpStep,self.prevSpeed,self.speed)
-        self.actSpeed = self.speed
+        self.actSpeed = int(Lerp(self.lerpStep,self.prevSpeed,self.speed))
         
         # If speed is positive we are moving forward
         if self.actSpeed >= 0:
