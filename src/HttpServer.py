@@ -38,7 +38,6 @@ class HttpServer():
 				# conn.sendall('\n')
 				conn.close()
 				dPrint("Connection with %s closed" % str(addr))
-				dPrint("esp free mem: %s"%str(esp.freemem()))
 				dPrint("gc free mem: %s"%str(gc.mem_free()))
 				dPrint (" --------end------- ")
 			except OSError:
