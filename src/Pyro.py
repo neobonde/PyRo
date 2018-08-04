@@ -2,6 +2,7 @@
 
 from HttpServer import HttpServer
 from SpeedMotor import SpeedMotor
+from DifferentialDrive import DifferentialDrive
 from Parser import parseJoystick
 import time
 x = 0
@@ -14,7 +15,11 @@ def main():
 
     #Setup
     server = HttpServer(networkSR_ms)
-    motorLeft = SpeedMotor(2,0)
+    # motorLeft = SpeedMotor(2,0)
+    # motorRight = SpeedMotor(4,16)
+    drive = DifferentialDrive (2,0,4,16)
+
+
 
 
     lastNetwork = time.ticks_ms()
@@ -24,11 +29,15 @@ def main():
         if(time.ticks_diff(time.ticks_ms(), lastNetwork) > networkSR_ms):
             lastNetwork = time.ticks_ms()
             handleNetworking(server)
-            motorLeft.SetSpeed(x)
+            drive.setInput(x,y)
+            # motorLeft.SetSpeed(x)
+            # motorRight.SetSpeed(x)
         
         if(time.ticks_diff(time.ticks_us(),lastControl) > controllerSR_us):
             lastControl = time.ticks_us()
-            motorLeft.Update()
+            # motorLeft.Update()
+            # motorRight.Update()
+            drive.Update()
             # print(motorLeft.GetActualSpeed())
 
 
