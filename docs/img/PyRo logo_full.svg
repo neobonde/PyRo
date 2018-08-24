@@ -11,8 +11,8 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="26.959717mm"
-   height="24.422501mm"
-   viewBox="0 0 26.959717 24.422501"
+   height="27.212296mm"
+   viewBox="0 0 26.959717 27.212296"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
@@ -111,6 +111,15 @@
        x2="63.31641"
        y2="146.91403"
        gradientTransform="matrix(0.09155016,0,0,0.09155016,36.53023,25.466515)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5428-5"
+       id="linearGradient869"
+       gradientUnits="userSpaceOnUse"
+       x1="39.646782"
+       y1="36.008877"
+       x2="48.143719"
+       y2="36.008877" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -120,8 +129,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4"
-     inkscape:cx="10.875901"
-     inkscape:cy="35.741794"
+     inkscape:cx="10.875903"
+     inkscape:cy="35.741792"
      inkscape:document-units="mm"
      inkscape:current-layer="g5438"
      showgrid="false"
@@ -145,7 +154,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -153,18 +162,18 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-13.257973,-23.168172)">
+     transform="translate(-13.257973,-20.378376)">
     <g
        id="g3732"
        transform="translate(-24.521979,-1.5367998)"
        style="fill:url(#linearGradient5430);fill-opacity:1;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none">
       <g
          id="g5438"
-         style="fill:url(#linearGradient5442)"
+         style="fill:url(#linearGradient869)"
          transform="translate(5.858631,-2.5513393)">
         <text
            xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0.01058333px;word-spacing:0px;fill:#366a96;fill-opacity:1;stroke:none;stroke-width:0.13229166;"
+           style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0.01058333px;word-spacing:0px;fill:#366a96;fill-opacity:1;stroke:none;stroke-width:0.13229166"
            x="32.249527"
            y="48.420551"
            id="text5527"
@@ -174,12 +183,12 @@
              id="tspan5525"
              x="32.249527"
              y="48.420551"
-             style="font-style:italic;font-variant:normal;font-weight:500;font-stretch:normal;font-family:roboto;-inkscape-font-specification:'roboto Medium Italic';letter-spacing:0px;fill:#366a96;fill-opacity:1;stroke-width:0.13229166;"><tspan
-               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:roboto;-inkscape-font-specification:'roboto Bold';letter-spacing:0px;fill:#366a96;fill-opacity:1;"
+             style="font-style:italic;font-variant:normal;font-weight:500;font-stretch:normal;font-family:roboto;-inkscape-font-specification:'roboto Medium Italic';letter-spacing:0px;fill:#366a96;fill-opacity:1;stroke-width:0.13229166"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:roboto;-inkscape-font-specification:'roboto Bold';letter-spacing:0px;fill:#366a96;fill-opacity:1"
                id="tspan4539">P<tspan
-   style="letter-spacing:1.32291663px;fill:#366a96;fill-opacity:1;"
+   style="letter-spacing:1.32291663px;fill:#366a96;fill-opacity:1"
    id="tspan4543">y</tspan></tspan><tspan
-               style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-family:roboto;-inkscape-font-specification:'roboto Light';letter-spacing:0px;fill:#366a96;fill-opacity:1;"
+               style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-family:roboto;-inkscape-font-specification:'roboto Light';letter-spacing:0px;fill:#366a96;fill-opacity:1"
                id="tspan4537">Ro</tspan></tspan></text>
         <path
            d="m 37.399929,38.686357 c -0.796486,-1.254237 -1.043671,-2.178894 -0.750711,-3.900037 0.173946,-1.061981 0.989474,-3.000134 1.40145,-3.622675 -0.338736,2.453544 2.036661,4.333838 3.510619,4.260598 -2.288754,-2.709885 -2.48599,-4.7943 -0.792312,-7.247844 0.869727,-1.263392 1.730298,-2.151429 2.75566,-2.709884 -0.732401,0.769021 -0.869727,2.087343 -0.759867,3.112705 0.146481,1.336632 0.933812,2.361994 1.693678,3.23172 1.519733,1.693678 2.938761,4.247928 1.812694,6.637387 -0.659162,1.382407 -2.316219,2.93876 -4.366943,2.792279 -2.096498,-0.119015 -3.652851,-1.226772 -4.504268,-2.554249 z"
