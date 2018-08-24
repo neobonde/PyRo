@@ -68,7 +68,7 @@ def send_cmd(ws, cmd):
     ws.write(bcmd, text=True)
     time.sleep(1) # Just to slow down comm
 
-TARGET_IP = "192.168.87.109"
+TARGET_IP = "192.168.87.110"
 TARGET_PORT = "8266"
 TARGET_PASS = "1234"
 
