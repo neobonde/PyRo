@@ -1,118 +1,84 @@
-import usocket as socket
-import gc, esp, os
-from Util import dPrint
-
-
-extension2ContentType = {
-	"htm" : "text/html",
-	"html" : "text/html",
-	"css" : "text/css",
-	"js" : "text/javascript",
-	"min.js" : "text/javascript",
-	"ico" : "image/x-icon",
-}
+import ure as re
+import picoweb
+from parser import parseJoystick
 
 class HttpServer():
-	def __init__(self, read_timeout):
-		# Create a socket
-		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.s.settimeout(0)
-		self.resp = None
-		# Bind socket to all of the hosts network addresses
-		self.s.bind(('0.0.0.0', 80))
+	def __init__(self, ip, port=80, debug = False):
+		self.ip = ip
+		self.port = port
+		self.debug = debug
+		
+		self.joystickX = 0
+		self.joystickY = 0
 
-		self.s.listen(1)	# just queue up some requests
-		self.timeout = read_timeout
+		self.app = picoweb.WebApp("PyRo Webserver")
 
-	def acceptConn(self):
-		#Make sure to handle all request that are "pending"
-		while (True):
-			try:
-				conn, addr = self.s.accept()
-				dPrint (" -------start------- ")
-				dPrint("Got a connection from %s" % str(addr))
-				resp = self.handleRequest(conn)
-				if resp is not None:
-					self.resp = resp
+		@self.app.route("/")
+		def index(req, resp):
+			print(req)
+			yield from picoweb.start_response(resp, content_type = "text/html")  
+			openFile = open('www/index.html', 'r')
+		
+			for line in openFile:
+				yield from resp.awrite(line)
 
-				# conn.sendall('\n')
-				conn.close()
-				dPrint("Connection with %s closed" % str(addr))
-				dPrint("gc free mem: %s"%str(gc.mem_free()))
-				dPrint (" --------end------- ")
-			except OSError:
-				return
+		@self.app.route("/favicon.ico")
+		def favico(req, resp):
+			yield from picoweb.start_response(resp, content_type = "image/x-icon") 
 
-
-	def handleRequest(self,conn):
-		conn.setblocking(True)
-		try:
-			request = (conn.recv(1024)).decode("utf-8")
-			dPrint("full req: '%s'"%str(request))
-		except OSError:
-			dPrint ("Read Timeout")
-			return None
-
-		if len(request) <= 0:
-			conn.sendall("HTTP/1.1 400 Bad Request")
-			return None
-		request_line, headers_alone = request.split('\r\n', 1)
-		dPrint("Got Request:\n%s"%str(request_line))
-
-		method, RequestURI, protocolVersion = request_line.split(' ',2)
-
-		dPrint("Method: '%s'"%method)
-		dPrint("RequestURI: '%s'"%RequestURI)
-		dPrint("protocolVer: '%s'"%protocolVersion)
-
-
-		if method == "GET":
-			# Special case for root, then we should serve index
-			if RequestURI == "/":
-				conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nServer: Pyro\r\nContent-Type: text/html\r\n\r\n")
-				with open("www/index.html","r") as file:
-
-					conn.sendall(file.read())
-					return None
-			elif "/DATA/" in RequestURI:
-				conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nServer: Pyro\r\n\r\n\r\n")
-				return RequestURI[6:]
-
-			else:
-				contentType = "text/html" # if there is no ending default to html
-				temp = ""
-				extension = ""
-				try:
-					temp, extension = RequestURI.split(".",1)
-				except ValueError:
-					extension = "html"
-
-				try:
-					contentType = extension2ContentType[extension]
-				except KeyError:
-					conn.sendall("HTTP/1.1 501 Not Implemented")
-					return None
-
-				# file = None
-				try:
-					os.stat("www" + RequestURI)
-					# file = open("www" + RequestURI,"r")
-				except OSError:
-					conn.sendall("HTTP/1.1 404 Not Found")
-					return None
-				
-				conn.sendall("HTTP/1.1 200 OK\r\nConnection: close\nCache-Control: no-cache, no-store, must-revalidate\nServer: Pyro\r\nContent-Type: %s\r\n\r\n"%contentType)
-				with open("www" + RequestURI,"r") as file:
-					# print(file.read())
-					conn.sendall(file.read())
-
-				return None
-		elif method == "POST":
-			pass
+			openFile = open("www/favicon.ico") 
 			
-		conn.sendall("HTTP/1.1 404 Not Found")
-		return None
+			for line in openFile:
+				yield from resp.awrite(line)
 
-	def getResponse(self):
-		return self.resp
 
+		@self.app.route(re.compile('^\/(.+\.html)$'))
+		def hyperText(req, resp):
+			file_path = req.url_match.group(1)
+			print(file_path)
+
+			yield from picoweb.start_response(resp, content_type = "text/html")  
+			openFile = open('www/'+file_path, 'r')
+		
+			for line in openFile:
+				yield from resp.awrite(line)
+
+
+		@self.app.route(re.compile('^\/(.+\.css)$'))
+		def styleSheet(req, resp):
+			file_path = req.url_match.group(1)
+			print(file_path)
+
+			yield from picoweb.start_response(resp, content_type = "text/css")  
+			openFile = open('www/'+file_path, 'r')
+		
+			for line in openFile:
+				yield from resp.awrite(line)
+
+		@self.app.route(re.compile('^\/(.+\.min.js)$'))
+		def minJavascript(req, resp):
+			file_path = req.url_match.group(1)
+			print(file_path)
+
+			yield from picoweb.start_response(resp, content_type = "application/javascript")  
+			openFile = open('www/'+ file_path, 'r')
+
+			for line in openFile:
+				yield from resp.awrite(line)
+
+
+		@self.app.route(re.compile('^\/(DATA\/joystick:.+)$'))
+		def joystick(req, resp):
+			joystick = req.url_match.group(1).split('/')[1]
+
+			self.joystickX, self.joystickY = parseJoystick(joystick)
+			
+			yield from picoweb.start_response(resp)
+
+
+
+	def start(self):
+		self.app.run(debug=self.debug, host=self.ip, port=self.port)
+
+	def getJoystick(self):
+		return self.joystickX, self.joystickY

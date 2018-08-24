@@ -70,6 +70,7 @@ class DifferentialDrive():
     
 
     def Update(self):
+        # print(str(self.joystickX) + ", " + str(self.joystickY))
         self.MotorLeft.Update()
         self.MotorRight.Update()
 
